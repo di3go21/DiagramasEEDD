@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import diragramas.model.Alumno;
 import diragramas.model.Profesor;
@@ -39,7 +38,6 @@ public class DaoProfesor extends DaoLogin {
 			ps.setString(1, dni);
 			ResultSet rs = ps.executeQuery();
 			Alumno al;
-			int i = 0;
 			while (rs.next()) {
 				al = new Alumno();
 				al.setNombre(rs.getString(1));
@@ -123,7 +121,24 @@ public class DaoProfesor extends DaoLogin {
 
 	}
 	
-	public void ponerNuevaNota(Alumno x) {}
+	public void ponerNuevaNota(Alumno x) {
+				
+		String consulta="insert into NotaAlumno values (?,?,?)";
+		PreparedStatement ps;
+		try {
+			ps = this.getConector().getConexion().prepareStatement(consulta);
+
+			ps.setString(1, x.getDni());
+			ps.setString(2, x.getAsignatura());
+			ps.setInt(3, x.getNotaPuntual());
+			ps.execute();
+			
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 
 	public Profesor getProfe() {

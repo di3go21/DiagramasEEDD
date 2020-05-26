@@ -1,5 +1,7 @@
 package diragramas.ui;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import diragramas.controlador.ControladorAlumno;
@@ -12,6 +14,7 @@ public class IU {
 	public static String[] cred;
 
 	public static void home() {
+			
 
 		teclado = new Scanner(System.in);
 		System.out.println("BIENVENIDO");
@@ -56,7 +59,7 @@ public class IU {
 				System.out.println("quieres poner notas???");
 				System.out.println("1.- SI        2.-NO");
 				opc = pideint();
-
+				boolean chivato;
 				if (opc == 1) {
 					System.out.println("dime el dni del alumno");
 					String dniAl = teclado.next();
@@ -66,33 +69,34 @@ public class IU {
 					String siglas = teclado.next();
 					System.out.println("por último la nota");
 					int nota = pideint();
+					chivato = false;
 
+					
+					//###############################
+					//TODO hay que cambiar el arraylist por hashcode y podemos ahorrarnos mucho codigo
+					//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ 
+					
+					
 					ctrProfe.getProfe().getAlumnos().forEach(x -> {
 
-						if (x.getDni().contentEquals(dniAl)) {
-							if (x.getApellido().contains(apell)) {
-								if (x.getAsignatura().contentEquals(siglas)) {
-									x.setNotaPuntual(nota);
-									ctrProfe.actualizaNotas(x);
-								}
-								else
-									System.out.println("la asignatura que impartes no coincide con este alumno");
-							} else {
-								System.out.println("el apellido no coicide con el dni");
-							}
-
-						} else {
-							System.out.println("no tienes a un alumno con ese DNI");
-						}
-
+						if (x.getDni().contentEquals(dniAl))
+							if (x.getApellido().contains(apell))
+								if (x.getAsignatura().contentEquals(siglas))
+									if (x.getNotaPuntual() >= 0) {
+										x.setNotaPuntual(nota);
+										ctrProfe.actualizaNotas(x); // ESTO NO SE COMO RESOLVERLO
+									} else {
+										x.setNotaPuntual(nota);
+										ctrProfe.insertaNota(x);
+									}
+								
 					});
 
 				} else if (opc == 2) {
 					System.out.println("adios");
-				}
-				else System.out.println("opcion no válida");
+				} else
+					System.out.println("opcion no válida");
 			}
-			
 
 		} else
 			credencialesErroneas();

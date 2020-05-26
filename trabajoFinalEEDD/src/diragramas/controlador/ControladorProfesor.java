@@ -41,10 +41,17 @@ public class ControladorProfesor implements Controlador{
 
 
 	public void actualizaNotas(Alumno x) {
-		// TODO Auto-generated method stub
 		this.daoProfe.getConector().reconecta();
 		this.daoProfe.actualizaNota(x);
 		this.daoProfe.getConector().desconecta();
+	}
+
+
+	public void insertaNota(Alumno x) {
+		this.daoProfe.getConector().reconecta();
+		this.daoProfe.ponerNuevaNota(x);
+		this.daoProfe.getConector().desconecta();
+		
 	}
 
 
