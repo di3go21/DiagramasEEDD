@@ -1,11 +1,12 @@
-create DATABASE if NOT EXISTS eedd;
+
+CREATE DATABASE if not exists eedd CHARACTER SET utf8 COLLATE utf8_general_ci;
 use eedd;
 
 CREATE TABLE IF NOT EXISTS `eedd`.`Curso` (
   `nombre` VARCHAR(50) NOT NULL,
   `siglas` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`siglas`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `eedd`.`Alumno` (
   `nombre` VARCHAR(45) NOT NULL,
@@ -19,14 +20,14 @@ CREATE TABLE IF NOT EXISTS `eedd`.`Alumno` (
     REFERENCES `eedd`.`Curso` (`siglas`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 CREATE TABLE IF NOT EXISTS `eedd`.`Asignatura` (
   `nombre` VARCHAR(45) NOT NULL,
   `siglas` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`siglas`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `eedd`.`Profesor` (
   `nombre` VARCHAR(45) NOT NULL,
@@ -34,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `eedd`.`Profesor` (
   `dni` VARCHAR(45) NOT NULL,
   `pass` VARCHAR(45) NULL,
   PRIMARY KEY (`dni`))
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `eedd`.`CUR_ASIG` (
   `xcurso` VARCHAR(45) NOT NULL,
@@ -56,7 +57,24 @@ CREATE TABLE IF NOT EXISTS `eedd`.`CUR_ASIG` (
     REFERENCES `eedd`.`Profesor` (`dni`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS `eedd`.`NotaAlumno` (
+  `xalumno` VARCHAR(45) NOT NULL,
+  `xasignatura` VARCHAR(45) NOT NULL,
+  `nota` INT NOT NULL,
+  PRIMARY KEY (`xalumno`, `xasignatura`),
+  CONSTRAINT `fk_Alumno_has_Asignatura_Alumno1`
+    FOREIGN KEY (`xalumno`)
+    REFERENCES `eedd`.`Alumno` (`dni`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Alumno_has_Asignatura_Asignatura1`
+    FOREIGN KEY (`xasignatura`)
+    REFERENCES `eedd`.`Asignatura` (`siglas`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 insert into Asignatura values (
 "Formación y Orientación Laboral","FOL"),(
@@ -87,8 +105,8 @@ insert into Curso values (
 insert into Alumno VALUES
 ("Diego","Leiva","112233",md5('alum'),"DAW"),
 ("Pedro","Gonzalez","223344",md5('alum'),"DAW"),
-("Lucí­a","Rodrí­guez","334455",md5('alum'),"DAW"),
-("Rocí­o","Gutiérrez","445566",md5('alum'),"DAW"),
+("Lucía","Rodríguez","334455",md5('alum'),"DAW"),
+("Rocío","Gutiérrez","445566",md5('alum'),"DAW"),
 ("Rubén","Sánchez","778899",md5('alum'),"DAW"),
 ("Daniel","Iglesias","667788",md5('alum'),"DAM"),
 ("Javier","Bale","998877",md5('alum'),"DAM"),
@@ -128,27 +146,13 @@ and Profesor.dni= CUR_ASIG.xprofesor
 order by Profesor.nombre,Asignatura.siglas;
 
 
-CREATE TABLE IF NOT EXISTS `eedd`.`NotaAlumno` (
-  `xalumno` VARCHAR(45) NOT NULL,
-  `xasignatura` VARCHAR(45) NOT NULL,
-  `nota` INT NOT NULL,
-  PRIMARY KEY (`xalumno`, `xasignatura`),
-  CONSTRAINT `fk_Alumno_has_Asignatura_Alumno1`
-    FOREIGN KEY (`xalumno`)
-    REFERENCES `eedd`.`Alumno` (`dni`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Alumno_has_Asignatura_Asignatura1`
-    FOREIGN KEY (`xasignatura`)
-    REFERENCES `eedd`.`Asignatura` (`siglas`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB
+
 
 
 ##consulta de notas de un alumno 
-select NA.xasignatura,NA.nota
-from Alumno as A, NotaAlumno as NA
-where A.dni=NA.xalumno
-and A.nombre=? 
-and A.apellido=?
+##select NA.xasignatura,NA.nota
+##from Alumno as A, NotaAlumno as NA
+##where A.dni=NA.xalumno
+##and A.nombre=? 
+##and A.apellido=?
+
