@@ -2,6 +2,7 @@ package diragramas.controlador;
 
 import diragramas.dao.Controlador;
 import diragramas.dao.DaoProfesor;
+import diragramas.model.Alumno;
 import diragramas.model.Profesor;
 
 public class ControladorProfesor implements Controlador{
@@ -36,6 +37,14 @@ public class ControladorProfesor implements Controlador{
 	
 	public Profesor getProfe() {
 		return daoProfe.getProfe();
+	}
+
+
+	public void actualizaNotas(Alumno x) {
+		// TODO Auto-generated method stub
+		this.daoProfe.getConector().reconecta();
+		this.daoProfe.actualizaNota(x);
+		this.daoProfe.getConector().desconecta();
 	}
 
 

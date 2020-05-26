@@ -24,8 +24,8 @@ public class DaoProfesor extends DaoLogin {
 		this.setProfe(this.cargaProfe(this.getConector().getConexion(), dni));
 
 		cargaAlumnos(dni);
-
-		// cargaNotas();
+		if (!this.profe.getAlumnos().isEmpty())
+			cargaNotas();
 
 	}
 
@@ -33,29 +33,27 @@ public class DaoProfesor extends DaoLogin {
 		String colsulta = "select AL.nombre,AL.apellido,AL.dni,CU.siglas,CA.xasignatura from Alumno as AL,"
 				+ " Curso as CU, CUR_ASIG as CA " + "where AL.curso = CU.siglas and "
 				+ "CA.xcurso = CU.siglas and CA.xprofesor=? order by CU.siglas";
-		 ArrayList<Alumno> listal= new ArrayList<Alumno>();
+		ArrayList<Alumno> listal = new ArrayList<Alumno>();
 		try {
 			PreparedStatement ps = this.getConector().getConexion().prepareStatement(colsulta);
 			ps.setString(1, dni);
 			ResultSet rs = ps.executeQuery();
-			Alumno al= new Alumno();
-			int i=0;
+			Alumno al;
+			int i = 0;
 			while (rs.next()) {
+				al = new Alumno();
 				al.setNombre(rs.getString(1));
-				al.setNombre(rs.getString(2));
+				al.setApellido(rs.getString(2));
 				al.setDni(rs.getString(3));
 				al.setCurso(rs.getString(4));
 				al.setAsignatura(rs.getString(5));
 				listal.add(al);
-				System.out.println("alumno "+i+al);
-				i++;
 			}
-			
+
 			this.profe.setAlumnos(listal);
 			rs.close();
 			ps.close();
-			
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -82,14 +80,51 @@ public class DaoProfesor extends DaoLogin {
 		return profe;
 	}
 
-	private void carganotas(String dni) {
-		String consulta = "select CU.siglas,ASI.nombre,AL.nombre,NO.nota "
-				+ "from Alumno as AL, Curso as CU, CUR_ASIG as CURA, Asignatura as ASI, NotaAlumno as NO "
-				+ "where CURA.xprofesor = ? and CURA.xasignatura = ASI.siglas "
-				+ "and NO.xasignatura = ASI.siglas and CURA.xcurso = CU.siglas "
-				+ "and AL.curso = CU.siglas	and AL.dni = NO.xalumno";
+	private void cargaNotas() {
+
+		String consulta = "select NO.nota from NotaAlumno as NO where NO.xalumno = ?" + " and NO.xasignatura=?";
+		try {
+			PreparedStatement ps = this.getConector().getConexion().prepareStatement(consulta);
+			ResultSet rs = null;
+			for (Alumno al : this.getProfe().getAlumnos()) {
+
+				ps.setString(1, al.getDni());
+				ps.setString(2, al.getAsignatura());
+				rs = ps.executeQuery();
+				if (rs.next())
+					al.setNotaPuntual(rs.getInt(1));
+				else
+					al.setNotaPuntual(-1);
+			}
+			rs.close();
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 	}
+
+	public void actualizaNota(Alumno x) {
+		String consulta = "update NotaAlumno set nota=? where xasignatura=? and xalumno=?";
+
+		PreparedStatement ps;
+		try {
+			ps = this.getConector().getConexion().prepareStatement(consulta);
+
+			ps.setInt(1, x.getNotaPuntual());
+			ps.setString(2, x.getAsignatura());
+			ps.setString(3, x.getDni());
+			ps.execute();
+			
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void ponerNuevaNota(Alumno x) {}
+	
 
 	public Profesor getProfe() {
 		return profe;

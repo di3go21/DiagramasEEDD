@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import diragramas.controlador.ControladorAlumno;
 import diragramas.controlador.ControladorProfesor;
+import diragramas.model.Alumno;
 
 public class IU {
 
@@ -34,16 +35,73 @@ public class IU {
 		ControladorProfesor ctrProfe = new ControladorProfesor(cred[0], cred[1]);
 		if (ctrProfe.logOK()) {
 			ctrProfe.cargaDatos();
-			System.out.println("bienvenido! "+ctrProfe.getProfe().getNombre()+" "+ctrProfe.getProfe().getApellido());
-			//if()
+			System.out.println(
+					"bienvenido! " + ctrProfe.getProfe().getNombre() + " " + ctrProfe.getProfe().getApellido());
+			// if()
 			System.out.println("tus alumnos son:");
-			ctrProfe.getProfe().getAlumnos().forEach(x->System.out.println(x));
+			System.out.printf("%-10s %-13s %-8s %-5s %-5s %n", "Nombre", "Apellido", "DNI", "CURSO", "ASIG");
+			ctrProfe.getProfe().getAlumnos().forEach(x -> {
+				System.out.printf("%-10s %-13s %-8s %-5s %-5s %n", x.getNombre(), x.getApellido(), x.getDni(),
+						x.getCurso(), x.getAsignatura());
+			});
+
+			System.out.println("Las notas de los alumnos son:");
+			ctrProfe.getProfe().getAlumnos().forEach(x -> {
+				if (x.getNotaPuntual() >= 0)
+					System.out.println(
+							x.getNombre() + " " + x.getApellido() + " " + x.getAsignatura() + " " + x.getNotaPuntual());
+			});
+			int opc = 0;
+			while (opc != 2) {
+				System.out.println("quieres poner notas???");
+				System.out.println("1.- SI        2.-NO");
+				opc = pideint();
+
+				if (opc == 1) {
+					System.out.println("dime el dni del alumno");
+					String dniAl = teclado.next();
+					System.out.println("dime el primer apellido del alumno");
+					String apell = teclado.next();
+					System.out.println("las siglas de la asignatura");
+					String siglas = teclado.next();
+					System.out.println("por último la nota");
+					int nota = pideint();
+
+					ctrProfe.getProfe().getAlumnos().forEach(x -> {
+
+						if (x.getDni().contentEquals(dniAl)) {
+							if (x.getApellido().contains(apell)) {
+								if (x.getAsignatura().contentEquals(siglas)) {
+									x.setNotaPuntual(nota);
+									ctrProfe.actualizaNotas(x);
+								}
+								else
+									System.out.println("la asignatura que impartes no coincide con este alumno");
+							} else {
+								System.out.println("el apellido no coicide con el dni");
+							}
+
+						} else {
+							System.out.println("no tienes a un alumno con ese DNI");
+						}
+
+					});
+
+				} else if (opc == 2) {
+					System.out.println("adios");
+				}
+				else System.out.println("opcion no válida");
+			}
 			
-						
 
 		} else
 			credencialesErroneas();
 
+	}
+
+	private static int pideint() {
+		// TODO
+		return teclado.nextInt();
 	}
 
 	private static void IUAlumno() {
