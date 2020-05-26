@@ -31,6 +31,14 @@ public class Conector {
 		return conex;
 	}
 	
+	public void reconecta() {
+		try {
+			conex = DriverManager.getConnection(url, usuario, pass);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void desconecta() {
 		//System.out.print("cerrando conexion con DB... ");
 		try {

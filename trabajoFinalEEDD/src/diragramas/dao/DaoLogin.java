@@ -13,8 +13,10 @@ public abstract class DaoLogin {
 		conexion= new Conector(); 
 	}
 	
-	public boolean estaLogueado(String dni,String pass) {
-		String consulta= "select count(*) from Alumno where dni =? and pass = md5(?)";
+	public boolean estaLogueado(String dni,String pass,String tabla) {
+		String consulta= "select count(*) from TABLA where dni =? and pass = md5(?)";
+		consulta=consulta.replaceFirst("TABLA", tabla);
+		
 		boolean logued=false;
 		try {
 			PreparedStatement ps = this.conexion.getConexion().prepareStatement(consulta);

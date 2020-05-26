@@ -6,6 +6,7 @@ public class Alumno extends Persona{
 	
 	private HashMap<Asignatura,Integer> notas;//no se si hay qinicializarla si se le asigna un objeto ya hecho
 	private String curso;
+	private String asignatura;
 	
 
 	public Alumno() {
@@ -37,12 +38,20 @@ public class Alumno extends Persona{
 		this.curso = curso;
 	}
 	
-	
+	public String getAsignatura() {
+		return asignatura;
+	}
+
+	public void setAsignatura(String asignatura) {
+		this.asignatura = asignatura;
+	}
 	
 	@Override
 	public String toString() {
 		return "Alumno ["+super.toString()+ ", curso=" + curso +", \nnotas=" + notas + "]";
 	}
+
+	
 	
 	
 	
