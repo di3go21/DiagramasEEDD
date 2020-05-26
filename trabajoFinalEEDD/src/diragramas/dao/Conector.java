@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Conexion {
+public class Conector {
 
 	private String usuario = "usuarioEEDD";
 	private String pass = "javiprofe";
@@ -13,17 +13,17 @@ public class Conexion {
 
 	private Connection conex = null;
 
-	public Conexion() {
+	public Conector() {
 
 		try {
 			conex = DriverManager.getConnection(url, usuario, pass);
 
 			if (conex != null) {
-				System.out.println("conectando con la BBDD: " + baseDatos + " ....OK");
+		//		System.out.println("conectando con la BBDD: " + baseDatos + " ....OK");
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Problemas de conexion con la BBDD");
+	//		System.out.println("Problemas de conexion con la BBDD");
 		}
 	}
 
@@ -32,12 +32,12 @@ public class Conexion {
 	}
 	
 	public void desconecta() {
-		System.out.print("cerrando conexion con DB... ");
+		//System.out.print("cerrando conexion con DB... ");
 		try {
 			conex.close();
-			System.out.println("OK");
+//			System.out.println("OK");
 		} catch (SQLException e) {
-			System.out.println("FAIL");
+	//		System.out.println("FAIL");
 		}
 	}
 

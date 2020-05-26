@@ -6,11 +6,11 @@ import java.sql.SQLException;
 
 public abstract class DaoLogin {
 	
-	protected Conexion conexion;
+	private Conector conexion;
 
 	public DaoLogin() {
 		super();
-		conexion= new Conexion(); 
+		conexion= new Conector(); 
 	}
 	
 	public boolean estaLogueado(String dni,String pass) {
@@ -34,6 +34,12 @@ public abstract class DaoLogin {
 		return logued;
 	
 	}
+
+	public Conector getConector() {
+		return conexion;
+	}
+
+	
 	
 	
 

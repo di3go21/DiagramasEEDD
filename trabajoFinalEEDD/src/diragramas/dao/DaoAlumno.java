@@ -20,7 +20,7 @@ public class DaoAlumno extends DaoLogin {
 
 	public void cargaAlumno(String dni) {
 
-		this.alum = this.cargaAlumno(this.conexion.getConexion(), dni);
+		this.alum = this.cargaAlumno(this.getConector().getConexion(), dni);
 
 		cargaMapNotas(dni);
 
@@ -66,7 +66,7 @@ public class DaoAlumno extends DaoLogin {
 				+ "and ASIG.siglas = NA.xasignatura " + "and A.dni=?";
 
 		try {
-			PreparedStatement ps = this.conexion.getConexion().prepareStatement(consulta);
+			PreparedStatement ps = this.getConector().getConexion().prepareStatement(consulta);
 			ps.setString(1, dni);
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
