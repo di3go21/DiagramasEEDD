@@ -2,7 +2,7 @@ create DATABASE if NOT EXISTS eedd;
 use eedd;
 
 CREATE TABLE IF NOT EXISTS `eedd`.`Curso` (
-  `nombre` VARCHAR(45) NOT NULL,
+  `nombre` VARCHAR(50) NOT NULL,
   `siglas` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`siglas`))
 ENGINE = InnoDB;
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `eedd`.`CUR_ASIG` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-insert into asignatura values (
+insert into Asignatura values (
 "Formación y Orientación Laboral","FOL"),(
 "Fundamentos de hardware","FUN"),(
 "Gestión de bases de datos","BBDD"),(
@@ -69,7 +69,7 @@ insert into asignatura values (
 ("Entornos de Desarrollo","ENT"),
 ("Programación","PROG");
 
-insert into profesor values (
+insert into Profesor values (
 "Javier","Lopez","111111",md5('profe')),
 ("Carolina","Tratamebien","222222",md5('profe')),
 ("Jerónimo","Eldefol","333333",md5('profe')),
@@ -78,13 +78,13 @@ insert into profesor values (
 ("Lorena","Aranda","666666",md5('profe')
 );
 
-insert into curso values (
+insert into Curso values (
     "Desarrollo de Aplicaciones Web","DAW"),
     ("Desarrollo de Aplicaciones Multiplataforma","DAM"),
     ("Administración de Sistemas Informáticos en Red","ASIR"
 );
 
-insert into alumno VALUES
+insert into Alumno VALUES
 ("Diego","Leiva","112233",md5('alum'),"DAW"),
 ("Pedro","Gonzalez","223344",md5('alum'),"DAW"),
 ("Lucía","Rodríguez","334455",md5('alum'),"DAW"),
@@ -101,7 +101,7 @@ insert into alumno VALUES
 ("Álvaro","Moreno","998833",md5('alum'),"ASIR"),
 ("Juan","Briones","445577",md5('alum'),"ASIR");
 
-insert into cur_asig values 
+insert into CUR_ASIG values 
 ("DAW","BBDD","444444"), 
 ("DAW","ENT","111111"), 
 ("DAW","PROG","666666"), 
@@ -112,17 +112,17 @@ insert into cur_asig values
 ("ASIR","FUN","555555"), 
 ("ASIR","BBDD","444444");
 
-select alumno.*, asignatura.nombre
-from alumno,curso,cur_asig,asignatura
-where alumno.curso=curso.siglas
-and cur_asig.xcurso = curso.siglas 
-and asignatura.siglas= cur_asig.xasignatura
-order by alumno.nombre;
+select Alumno.*, Asignatura.nombre
+from Alumno,Curso,CUR_ASIG,Asignatura
+where Alumno.curso=Curso.siglas
+and CUR_ASIG.xcurso = Curso.siglas 
+and Asignatura.siglas= CUR_ASIG.xasignatura
+order by Alumno.nombre;
 
-select profesor.*, curso.siglas, alumno.nombre, asignatura.siglas
-from alumno,curso,cur_asig,profesor,asignatura
-where alumno.curso=curso.siglas
-and cur_asig.xcurso = curso.siglas 
-and cur_asig.xasignatura = asignatura.siglas 
-and profesor.dni= cur_asig.xprofesor
-order by profesor.nombre,asignatura.siglas;
+select Profesor.*, Curso.siglas, Alumno.nombre, Asignatura.siglas
+from Alumno,Curso,CUR_ASIG,Profesor,Asignatura
+where Alumno.curso=Curso.siglas
+and CUR_ASIG.xcurso = Curso.siglas 
+and CUR_ASIG.xasignatura = Asignatura.siglas 
+and Profesor.dni= CUR_ASIG.xprofesor
+order by Profesor.nombre,Asignatura.siglas;
